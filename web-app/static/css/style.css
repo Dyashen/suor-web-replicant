@@ -1,0 +1,97 @@
+body {
+    width:90%;
+    margin:auto;
+    font-family: 'Montserrat';
+    background-color: antiquewhite;
+    display: flex;
+}
+
+h1, h2, h3{
+  margin-top: 5%;
+  text-align: center;
+}
+
+.navbar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 15%;
+    max-height: 100vh;
+    background-color: #f0f0f0;
+    overflow-y: auto;
+  }
+  .navbar-item {
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  .navbar-item:last-child {
+    border-bottom: none;
+  }
+  
+  .body-content {
+    flex: 1;
+    padding-left: 15%;
+  }  
+  
+
+a{
+    text-decoration: none !important;
+    color:black;
+}
+
+a:hover{
+    text-decoration: solid black;
+    color: red;
+}
+
+.charts{
+    display: flex;
+    width: 100%;
+}
+
+.chart
+{
+    margin:auto;
+    width:30%;
+}
+
+.chart h3{
+    text-align: center;
+}
+
+.information{
+    width:70%;
+    display: flex;
+    margin:auto;
+}
+
+.basic-info{width: 60%;margin: auto;}
+
+.searchwords{width: 30%;}
+
+.ranking{
+    width: 50%;
+    margin:auto;
+    text-align: center;
+}
+
+
+.table-ranking{
+  width: 100%;
+}
+
+
+.sectoren {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  .sectoren a {
+    text-align: center;
+    background-color: white;
+    padding: 10px;
+    flex: 1 0 calc(33.33% - 10px);
+    margin: 5px;
+  }
+  

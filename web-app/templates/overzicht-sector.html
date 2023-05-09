@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="..\static\css\style.css">
+    <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
+    <title>Dashboard</title>
+</head>
+<body>
+
+  <div class="navbar">
+    {% for company in nav %}
+    <div class="navbar-item">
+      <a href="/company?id={{ company[0] }}">{{ company[1] }}</a>
+    </div>
+    {% endfor %}
+  </div>
+
+  <div class="body-content">
+    <div>
+      <a href="/">Terug naar home.</a>
+    </div>
+
+    <h1>{{ result[0][0] }}</h1>
+
+    <h1>Grafieken</h1>
+    <div class="charts">
+        <div class="chart"><h3>Environment</h3><canvas id="scores_e" width="500" height="500"></canvas></div>
+        <div class="chart"><h3>Social</h3><canvas id="scores_s" width="500" height="500"></canvas></div>
+        <div class="chart"><h3>Governance</h3><canvas id="scores_g" width="500" height="500"></canvas></div>
+    </div>
+
+
+    <div class="charts">
+        <div class="chart"><h3>balanstotaal</h3><canvas id="balanstotaal" width="500" height="500"></canvas></div>
+        <div class="chart"><h3>Omzet</h3><canvas id="omzet" width="500" height="500"></canvas></div>
+        <div class="chart"><h3>Aantal werknemers</h3><canvas id="aantal_werknemers" width="500" height="500"></canvas></div>
+    </div>
+    </div>
+    </body>
+</div>
+</html>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        var result = {{ result | tojson }};
+        console.log(result);
+        var balanstotaal = result[0][1];
+        var omzet = result[0][2];
+        var aantal_werknemers = result[0][3];
+        var subdomains_environment = result[0][5];
+        var subdomains_social = result[0][6];
+        var subdomains_governance = result[0][7];
+    </script>
+
+    <script>
+      var ctx = document.getElementById("balanstotaal").getContext("2d");
+      const balanstotaal_chart = new Chart(ctx, {
+        type: "bar",
+        data: {
+          labels: ["Minimum", "Gemiddelde", "Maximum"],
+          datasets: [
+            {
+              label: "Percentiel",
+              data: balanstotaal,
+              borderWidth: 1,
+            },
+          ],
+        },
+      });
+    </script>
+
+
+<script>
+  var ctx = document.getElementById("omzet").getContext("2d");
+  const omzet_chart = new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels: ["Minimum", "Gemiddelde", "Maximum"],
+      datasets: [
+        {
+          label: "Percentiel",
+          data: omzet,
+          borderWidth: 1,
+        },
+      ],
+    },
+  });
+</script>
+
+
+<script>
+  var ctx = document.getElementById("aantal_werknemers").getContext("2d");
+  const personeel_chart = new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels: ["Minimum", "Gemiddelde", "Maximum"],
+      datasets: [
+        {
+          label: "Percentiel",
+          data: aantal_werknemers,
+          borderWidth: 1,
+        },
+      ],
+    },
+  });
+</script>
+
+
+
+
+
+<script>
+    var ctx = document.getElementById("scores_e").getContext("2d");
+    const chart_env = new Chart(ctx, {
+      type: "bar",
+      data: {
+        labels: ["Minimum", "Gemiddelde", "Maximum"],
+        datasets: [
+          {
+            label: "Percentiel",
+            data: subdomains_environment,
+            borderWidth: 1,
+          },
+        ],
+      },
+    });
+  </script>
+
+
+<script>
+    var ctx = document.getElementById("scores_s").getContext("2d");
+    const chart_soc = new Chart(ctx, {
+      type: "bar",
+      data: {
+        labels: ["Minimum", "Gemiddelde", "Maximum"],
+        datasets: [
+          {
+            label: "Percentiel",
+            data: subdomains_social,
+            borderWidth: 1,
+          },
+        ],
+      },
+    });
+  </script>
+
+
+<script>
+    var ctx = document.getElementById("scores_g").getContext("2d");
+    const chart_gov = new Chart(ctx, {
+      type: "bar",
+      data: {
+        labels: ["Minimum", "Gemiddelde", "Maximum"],
+        datasets: [
+          {
+            label: "Percentiel",
+            data: subdomains_governance,
+            borderWidth: 1,
+          },
+        ],
+      },
+    });
+  </script>

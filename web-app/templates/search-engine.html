@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../static/css/style.css" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Montserrat"
+      rel="stylesheet"
+    />
+    <title>Dashboard</title>
+  </head>
+  <body>
+    <div class="navbar">
+      {% for company in nav %}
+      <div class="navbar-item">
+        <a href="/company?id={{ company[0] }}">{{ company[1] }}</a>
+      </div>
+      {% endfor %}
+    </div>
+
+    <div class="body-content">
+      <h2>Geavanceerd zoeken</h2>
+
+      <button onmousedown="searchByName()"><a>Zoeken per naam</a></button>
+      <button onmousedown="searchByOccurrence()"><a>Zoeken per voorkomen / woord</a></button>
+      <button onmousedown="searchBySector()"><a>Zoeken per sector</a></button>
+
+      <script>
+        function searchByName() {
+          var answer = prompt("Geef de naam van het bedrijf in:");
+          if (answer != null) {
+          }
+        }
+      </script>
+
+      <script>
+        function searchByOccurrence() {
+          var answer = prompt("Geef een zoekwoord in:");
+          if (answer != null) {
+          }
+        }
+      </script>
+
+      <div id="searchResult" hidden>
+        <select name="" id="">
+          {% for s in sectoren %}
+            <option value="{{ s[0] }}">{{ s[0] }}</option>
+          {%endfor%}
+        </select>
+      </div>
+
+      <script>
+        function searchBySector() {
+          let sectoren = document.querySelector("#searchResult");
+          sectoren.removeAttribute("hidden");
+        }
+      </script>
+
+      <div>
+        <table>
+          <tr>
+            <th>Ondernemingsnummer</th>
+            <th>Naam</th>
+            <th>Sector</th>
+            <th>Totaalscore</th>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </body>
+</html>
+
+<script></script>

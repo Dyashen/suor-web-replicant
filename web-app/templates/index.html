@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../static/css/style.css" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Montserrat"
+      rel="stylesheet"
+    />
+    <title>Dashboard</title>
+  </head>
+  <body>
+    <div class="navbar">
+      {% for company in nav %}
+      <div class="navbar-item">
+        <a href="/company?id={{ company[0] }}">{{ company[1] }}</a>
+      </div>
+      {% endfor %}
+    </div>
+
+    <div class="body-content">
+      <h1>Dashboard</h1>
+
+      <a href="/search"><input type="button" value="Geavanceerde zoekmachine"></input></a>
+
+      <h2>Beste Environment-scorende bedrijven</h2>
+      <div class="ranking-table">
+        <table class="ranking">
+          <tr>
+            <th>Ondernemingsnummer</th>
+            <th>Bedrijf</th>
+            <th>Sector</th>
+          </tr>
+          {% for company in E %}
+          <tr>
+            <td>
+              <a href="/company?id={{ company[0] }}">{{ company[0] }}</a>
+            </td>
+            <td>{{ company[1] }}</td>
+            <td>{{ company[2] }}</td>
+          </tr>
+          {% endfor %}
+        </table>
+      </div>
+
+      <h2>Best Social-scorende bedrijven</h2>
+      <div class="ranking-table">
+        <table class="ranking">
+          <tr>
+            <th>Ondernemingsnummer</th>
+            <th>Bedrijf</th>
+            <th>Sector</th>
+          </tr>
+          {% for company in S %}
+          <tr>
+            <td>
+              <a href="/company?id={{ company[0] }}">{{ company[0] }}</a>
+            </td>
+            <td>{{ company[1] }}</td>
+            <td>{{ company[2] }}</td>
+          </tr>
+          {% endfor %}
+        </table>
+      </div>
+
+      <h2>Best Governance-scorende bedrijven</h2>
+      <div class="ranking-table">
+        <table class="ranking">
+          <tr>
+            <th>Ondernemingsnummer</th>
+            <th>Bedrijf</th>
+            <th>Sector</th>
+          </tr>
+          {% for company in G %}
+          <tr>
+            <td>
+              <a href="/company?id={{ company[0] }}">{{ company[0] }}</a>
+            </td>
+            <td>{{ company[1] }}</td>
+            <td>{{ company[2] }}</td>
+          </tr>
+          {% endfor %}
+        </table>
+      </div>
+
+      <h2>Sectoren</h2>
+      <div class="sectoren">
+        {% for sector in sectoren %}
+        <a href="/sector?id={{ sector[0] }}">{{ sector[0] }}</a> {% endfor %}
+      </div>
+    </div>
+  </body>
+</html>
