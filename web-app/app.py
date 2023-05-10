@@ -115,17 +115,24 @@ def give_sector():
 def return_search_engine():
 
     results = dict(request.args)
-
     if results:
+
+        sector_filter = f"""v.sectornaam = '{results['sector']}'"""
+        searchwords = results['searchwords'].split('\n')
+        
         query = f"""
-        select k.ondernemingsnummer, k.naam, v.* 
+        select k.ondernemingsnummer, k.naam, v.sectornaam, v.{results['domain']} 
         from "KMO" k
         left join view_website_data v on v.ondernemingsnummer = k.ondernemingsnummer
         where 
-            ts_document @@ to_tsquery('english', '{results['searchwords']}') and
-            {results['domain']} >= {float(results['percentile'])}
-        limit 5;
+            --ts_document @@ to_tsquery('english', '{searchwords[0].replace(' ','')}') and
+            {sector_filter} and
+            {results['domain']} >= {float(results['percentile'])/100}
+        order by v.{results['domain']} desc
+        limit {results['amount']};
         """
+
+        print(query)
 
         conn = connection()
         cur = conn.cursor()
