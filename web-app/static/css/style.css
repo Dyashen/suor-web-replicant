@@ -70,6 +70,10 @@ a:hover{
 
 .searchwords{width: 30%;}
 
+.searchwords-select{
+  height: 200px;
+}
+
 .ranking{
     width: 50%;
     margin:auto;

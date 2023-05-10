@@ -23,40 +23,75 @@
     <div class="body-content">
       <h2>Geavanceerd zoeken</h2>
 
-      <button onmousedown="searchByName()"><a>Zoeken per naam</a></button>
-      <button onmousedown="searchByOccurrence()"><a>Zoeken per voorkomen / woord</a></button>
-      <button onmousedown="searchBySector()"><a>Zoeken per sector</a></button>
+      <fieldset>
+        <form action="/search" method="GET">
+          <!--Naam-->
+          <p>
+            <label for="companyname">Ondernemingsnaam</label
+            ><input type="text" name="companyname" id="" />
+          </p>
 
-      <script>
-        function searchByName() {
-          var answer = prompt("Geef de naam van het bedrijf in:");
-          if (answer != null) {
-          }
-        }
-      </script>
+          <!--Percentiel-->
+          <p>
+            <label for="percentile">Percentiel / score</label
+            ><input
+              type="number"
+              step="0.01"
+              min="0"
+              max="100"
+              name="percentile"
+            />
+          </p>
 
-      <script>
-        function searchByOccurrence() {
-          var answer = prompt("Geef een zoekwoord in:");
-          if (answer != null) {
-          }
-        }
-      </script>
+          <!--Domein-->
+          <label for="domain">Domein (voor percentiel)</label>
+          <p>
+            <select name="domain">
+              <option value="domein_environment">Environment</option>
+              <option value="domein_social">Social</option>
+              <option value="domein_governance">Governance</option>
+            </select>
+          </p>
 
-      <div id="searchResult" hidden>
-        <select name="" id="">
-          {% for s in sectoren %}
-            <option value="{{ s[0] }}">{{ s[0] }}</option>
-          {%endfor%}
-        </select>
-      </div>
+          <!--Sector-->
+          <p>
+            <label for="">Sector</label>
+            <select name="" id="">
+              {% for s in sectoren %}
+              <option value="{{ s[0] }}">{{ s[0] }}</option>
+              {%endfor%}
+            </select>
+          </p>
 
-      <script>
-        function searchBySector() {
-          let sectoren = document.querySelector("#searchResult");
-          sectoren.removeAttribute("hidden");
-        }
-      </script>
+          <!--Zoekwoorden-->
+          <p>
+            <select name="searchwords" multiple class="searchwords-select" ondblclick="logSelectedValues()">
+              {% for category, values in searchwords.items() %}
+              <optgroup label="{{ category }}">
+                {% for value in values %}
+                <option value="{{ value }}">{{ value }}</option>
+                {% endfor %}
+              </optgroup>
+              {% endfor %}
+            </select>
+            
+            <script>
+            function logSelectedValues() {
+              const selectElement = document.querySelector('.searchwords-select');
+              const selectedOptions = Array.from(selectElement.selectedOptions).map(option => option.value);
+              const textareaElement = document.querySelector('#searchwords-selected');
+              selectedOptions.forEach(option => {textareaElement.value += option + '\n';});
+            } 
+            </script>            
+          </p>
+
+          <p><textarea name="searchwords" id="searchwords-selected" cols="30" rows="10"></textarea></p>
+
+          <button type="submit">Submit</button>
+        </form>
+      </fieldset>
+
+      {{ results }}
 
       <div>
         <table>

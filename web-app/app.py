@@ -3,8 +3,11 @@ import os
 import psycopg2
 app = Flask(__name__)
 
+dict_sectoren = {
+    ''
+}
+
 def connection():
-    
     DB_NAME=os.getenv('DB_NAME')
     DB_USER=os.getenv('DB_USER')
     DB_HOST=os.getenv('DB_HOST')
@@ -31,10 +34,30 @@ def return_sectoren():
         return cur.fetchall()
     except:
         return [[]]
+    
+
+def return_searchwords():
+    try:
+        con = connection()
+        cur = con.cursor()
+        cur.execute('select z.zoekterm_description, c.categorie_naam from zoektermen z left join categorie_zoektermen c on c.categorie_id = z.categorie_id')
+
+        result = cur.fetchall()
+        output = {}
+        for row in result:
+            category = row[1]
+            value = row[0]
+            if category not in output:
+                output[category] = []
+            output[category].append(value)
+        return(output)
+
+    except Exception as e:
+        print(e)
+        return [[]]
 
 @app.route("/")
 def index():
-    
     conn = connection()
     cur = conn.cursor()
 
@@ -90,23 +113,32 @@ def give_sector():
 
 @app.route('/search', methods=['GET', 'POST'])
 def return_search_engine():
-    return render_template('search-engine.html', nav=return_companies(), sectoren=return_sectoren())
 
+    results = dict(request.args)
 
-@app.route('/search-by', methods=['GET', 'POST'])
-def return_looked_up_companies():
-    name = request.args.get('name')
-    sector = request.args.get('sector')
-    zoekwoorden = request.args.get('zoekwoord')
+    if results:
+        query = f"""
+        select k.ondernemingsnummer, k.naam, v.* 
+        from "KMO" k
+        left join view_website_data v on v.ondernemingsnummer = k.ondernemingsnummer
+        where 
+            ts_document @@ to_tsquery('english', '{results['searchwords']}') and
+            {results['domain']} >= {float(results['percentile'])}
+        limit 5;
+        """
 
-    query = f"""
-    select k.ondernemingsnummer, k.naam, v.* 
-    from "KMO" k
-    left join view_website_data v on v.ondernemingsnummer = k.ondernemingsnummer
-    where ts_document @@ to_tsquery('english')
-    """
+        conn = connection()
+        cur = conn.cursor()
+        try:
+            cur.execute(query)
+            output = cur.fetchall()
+        except Exception as e:
+            print(e)
+            output=[[]]
+    else:
+        output = [[]]
 
-    return jsonify(name=name, sector=sector, zoekwoorden=zoekwoorden)
+    return render_template('search-engine.html', nav=return_companies(), sectoren=return_sectoren(), searchwords=return_searchwords(), results=output)
 
 
 if __name__ == "__main__":
