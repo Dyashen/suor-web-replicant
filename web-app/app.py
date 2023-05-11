@@ -1,13 +1,11 @@
 from flask import Flask, render_template, request, jsonify
+from dotenv import load_dotenv
 import os
 import psycopg2
 app = Flask(__name__)
 
-dict_sectoren = {
-    ''
-}
-
 def connection():
+    load_dotenv()
     DB_NAME=os.getenv('DB_NAME')
     DB_USER=os.getenv('DB_USER')
     DB_HOST=os.getenv('DB_HOST')
@@ -58,31 +56,33 @@ def return_searchwords():
 
 @app.route("/")
 def index():
-    conn = connection()
-    cur = conn.cursor()
-
     try:
-        cur.execute('select * from view_website_data order by domein_environment desc limit 5')
-        results_E = cur.fetchall()
+        conn = connection()
+        cur = conn.cursor()
+
+        try:
+            cur.execute('select * from view_website_data order by domein_environment desc limit 5')
+            results_E = cur.fetchall()
+        except:
+            results_E = [[]]
+
+        try:
+            cur.execute('select * from view_website_data order by domein_social desc limit 5')
+            results_S = cur.fetchall()
+        except:
+            results_S = [[]]
+
+        try:
+            cur.execute('select * from view_website_data order by domein_governance desc limit 5')
+            results_G = cur.fetchall()
+        except:
+            results_G = [[]]
+
+        cur.close()
+        conn.close()
+        return render_template('index.html', E=results_E, S=results_S, G=results_G, nav=return_companies(), sectoren=return_sectoren())
     except:
-        results_E = [[]]
-
-    try:
-        cur.execute('select * from view_website_data order by domein_social desc limit 5')
-        results_S = cur.fetchall()
-    except:
-        results_S = [[]]
-
-    try:
-        cur.execute('select * from view_website_data order by domein_governance desc limit 5')
-        results_G = cur.fetchall()
-    except:
-        results_G = [[]]
-
-    cur.close()
-    conn.close()
-    return render_template('index.html', E=results_E, S=results_S, G=results_G, nav=return_companies(), sectoren=return_sectoren())
-
+        return render_template('error.html')
 
 @app.route('/company', methods=['GET','POST'])
 def give_company():
@@ -119,29 +119,33 @@ def return_search_engine():
 
         sector_filter = f"""v.sectornaam = '{results['sector']}'"""
         searchwords = results['searchwords'].split('\n')
+
+        output = {}
         
-        query = f"""
-        select k.ondernemingsnummer, k.naam, v.sectornaam, v.{results['domain']} 
-        from "KMO" k
-        left join view_website_data v on v.ondernemingsnummer = k.ondernemingsnummer
-        where 
-            --ts_document @@ to_tsquery('english', '{searchwords[0].replace(' ','')}') and
-            {sector_filter} and
-            {results['domain']} >= {float(results['percentile'])/100}
-        order by v.{results['domain']} desc
-        limit {results['amount']};
-        """
+        for word in searchwords:
+            query = f"""
+            select k.ondernemingsnummer, k.naam, v.sectornaam, v.{results['domain']} 
+            from "KMO" k
+            left join view_website_data v on v.ondernemingsnummer = k.ondernemingsnummer
+            where 
+                --ts_document @@ to_tsquery('english', '{word.replace(' ','')}') and
+                {sector_filter} and
+                {results['domain']} >= {float(results['percentile'])/100}
+            order by v.{results['domain']} desc
+            limit {results['amount']};
+            """
 
-        print(query)
-
-        conn = connection()
-        cur = conn.cursor()
-        try:
-            cur.execute(query)
-            output = cur.fetchall()
-        except Exception as e:
-            print(e)
-            output=[[]]
+            conn = connection()
+            cur = conn.cursor()
+            try:
+                cur.execute(query)
+                print(cur.fetchall())
+                output[word] = list(cur.fetchall())
+            except Exception as e:
+                print(e)
+                output=[[]]
+        
+        print(output)
     else:
         output = [[]]
 

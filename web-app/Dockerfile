@@ -1,12 +1,14 @@
-FROM python:3.10-slim-buster
+FROM python:3-alpine
 
 WORKDIR /app
 
 COPY requirements.txt requirements.txt
 
-RUN apt-get update
-
-RUN pip3 install --upgrade pip && pip3 install -r requirements.txt
+RUN \
+ apk add --no-cache postgresql-libs && \
+ apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev && \
+ python3 -m pip install -r requirements.txt --no-cache-dir && \
+ apk --purge del .build-deps
 
 COPY . .
 
