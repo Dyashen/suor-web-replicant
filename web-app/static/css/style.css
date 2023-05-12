@@ -108,8 +108,9 @@ a:hover{
     margin: 5px;
   }
 
+.advanced-search-button-div{margin: auto;}
+
 .advanced-search-button{
-  margin:auto;
   background-color: white;
   width: 20%;
 }

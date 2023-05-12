@@ -23,7 +23,13 @@
     <div class="body-content">
       <h1>Dashboard</h1>
 
-      <a href="/search"><input type="button" class="advanced-search-button" value="Geavanceerde zoekmachine"></input></a>
+      <div class="advanced-search-button-div"><a href="/search"><input type="button" class="advanced-search-button" value="Geavanceerde zoekmachine"></input></a></div>
+
+      <h2>Sectoren</h2>
+      <div class="sectoren">
+        {% for sector in sectoren %}
+        <a href="/sector?id={{ sector[0] }}">{{ sector[0] }}</a> {% endfor %}
+      </div>
 
       <h2>Beste Environment-scorende bedrijven</h2>
       <div class="ranking-table">
@@ -83,12 +89,6 @@
           </tr>
           {% endfor %}
         </table>
-      </div>
-
-      <h2>Sectoren</h2>
-      <div class="sectoren">
-        {% for sector in sectoren %}
-        <a href="/sector?id={{ sector[0] }}">{{ sector[0] }}</a> {% endfor %}
       </div>
     </div>
   </body>
