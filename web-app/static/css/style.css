@@ -2,7 +2,7 @@ body {
     width:90%;
     margin:auto;
     font-family: 'Montserrat';
-    background-color: antiquewhite;
+    background-color: aliceblue;
     display: flex;
 }
 
@@ -38,6 +38,7 @@ h1, h2, h3{
 a{
     text-decoration: none !important;
     color:black;
+
 }
 
 a:hover{
@@ -68,7 +69,11 @@ a:hover{
 
 .basic-info{width: 60%;margin: auto;}
 
-.searchwords{width: 30%;}
+.searchwords{
+  width: 30%;
+  height: 200px;
+  overflow-y: scroll;
+}
 
 .searchwords-select{
   height: 200px;
@@ -98,4 +103,14 @@ a:hover{
     flex: 1 0 calc(33.33% - 10px);
     margin: 5px;
   }
-  
+
+.advanced-search-button{
+  margin:auto;
+  background-color: white;
+  width: 20%;
+}
+
+.advanced-search-button:hover{
+  background-color: brown;
+  color: white;
+}

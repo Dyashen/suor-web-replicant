@@ -54,9 +54,7 @@
         var subdomains_environment = result[0][5];
         var subdomains_social = result[0][6];
         var subdomains_governance = result[0][7];
-    </script>
-
-    <script>
+    
       var ctx = document.getElementById("balanstotaal").getContext("2d");
       const balanstotaal_chart = new Chart(ctx, {
         type: "bar",
@@ -64,17 +62,14 @@
           labels: ["Minimum", "Gemiddelde", "Maximum"],
           datasets: [
             {
-              label: "Percentiel",
+              label: "Balanstotaal (in euro)",
               data: balanstotaal,
               borderWidth: 1,
             },
           ],
         },
       });
-    </script>
 
-
-<script>
   var ctx = document.getElementById("omzet").getContext("2d");
   const omzet_chart = new Chart(ctx, {
     type: "bar",
@@ -82,17 +77,14 @@
       labels: ["Minimum", "Gemiddelde", "Maximum"],
       datasets: [
         {
-          label: "Percentiel",
+          label: "Omzet (in euro)",
           data: omzet,
           borderWidth: 1,
         },
       ],
     },
   });
-</script>
 
-
-<script>
   var ctx = document.getElementById("aantal_werknemers").getContext("2d");
   const personeel_chart = new Chart(ctx, {
     type: "bar",
@@ -100,20 +92,14 @@
       labels: ["Minimum", "Gemiddelde", "Maximum"],
       datasets: [
         {
-          label: "Percentiel",
+          label: "Aantal werknemers",
           data: aantal_werknemers,
           borderWidth: 1,
         },
       ],
     },
   });
-</script>
 
-
-
-
-
-<script>
     var ctx = document.getElementById("scores_e").getContext("2d");
     const chart_env = new Chart(ctx, {
       type: "bar",
@@ -128,10 +114,7 @@
         ],
       },
     });
-  </script>
 
-
-<script>
     var ctx = document.getElementById("scores_s").getContext("2d");
     const chart_soc = new Chart(ctx, {
       type: "bar",
@@ -146,10 +129,7 @@
         ],
       },
     });
-  </script>
 
-
-<script>
     var ctx = document.getElementById("scores_g").getContext("2d");
     const chart_gov = new Chart(ctx, {
       type: "bar",

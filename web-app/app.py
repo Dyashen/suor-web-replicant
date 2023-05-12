@@ -116,36 +116,44 @@ def return_search_engine():
 
     results = dict(request.args)
     if results:
-
         sector_filter = f"""v.sectornaam = '{results['sector']}'"""
         searchwords = results['searchwords'].split('\n')
+        searchwords = searchwords[:-1]
 
         output = {}
-        
         for word in searchwords:
-            query = f"""
-            select k.ondernemingsnummer, k.naam, v.sectornaam, v.{results['domain']} 
-            from "KMO" k
-            left join view_website_data v on v.ondernemingsnummer = k.ondernemingsnummer
-            where 
-                --ts_document @@ to_tsquery('english', '{word.replace(' ','')}') and
-                {sector_filter} and
-                {results['domain']} >= {float(results['percentile'])/100}
-            order by v.{results['domain']} desc
-            limit {results['amount']};
-            """
+            if results['type'] == 'jaarverslag':
+                query = f"""
+                select k.ondernemingsnummer, k.naam, v.sectornaam, v.{results['domain']} 
+                from "Balans" b
+                left join view_website_data v on v.ondernemingsnummer = k.ondernemingsnummer
+                where 
+                    ts_document @@ to_tsquery('english', '{word.replace(' ','')}') and
+                    {sector_filter} and
+                    {results['domain']} >= {float(results['percentile'])/100}
+                order by v.{results['domain']} desc
+                limit {results['amount']};
+                """
+            else:
+                query = f"""
+                select k.ondernemingsnummer, k.naam, v.sectornaam, v.{results['domain']} 
+                from "KMO" k
+                left join view_website_data v on v.ondernemingsnummer = k.ondernemingsnummer
+                where 
+                    ts_document @@ to_tsquery('english', '{word.replace(' ','')}') and
+                    {sector_filter} and
+                    {results['domain']} >= {float(results['percentile'])/100}
+                order by v.{results['domain']} desc
+                limit {results['amount']};
+                """
 
             conn = connection()
             cur = conn.cursor()
             try:
                 cur.execute(query)
-                print(cur.fetchall())
                 output[word] = list(cur.fetchall())
             except Exception as e:
                 print(e)
-                output=[[]]
-        
-        print(output)
     else:
         output = [[]]
 

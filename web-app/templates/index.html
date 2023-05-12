@@ -23,7 +23,7 @@
     <div class="body-content">
       <h1>Dashboard</h1>
 
-      <a href="/search"><input type="button" value="Geavanceerde zoekmachine"></input></a>
+      <a href="/search"><input type="button" class="advanced-search-button" value="Geavanceerde zoekmachine"></input></a>
 
       <h2>Beste Environment-scorende bedrijven</h2>
       <div class="ranking-table">
@@ -39,7 +39,7 @@
               <a href="/company?id={{ company[0] }}">{{ company[0] }}</a>
             </td>
             <td>{{ company[1] }}</td>
-            <td>{{ company[2] }}</td>
+            <td>{{ company[5] }}</td>
           </tr>
           {% endfor %}
         </table>
@@ -59,7 +59,7 @@
               <a href="/company?id={{ company[0] }}">{{ company[0] }}</a>
             </td>
             <td>{{ company[1] }}</td>
-            <td>{{ company[2] }}</td>
+            <td>{{ company[5] }}</td>
           </tr>
           {% endfor %}
         </table>
@@ -79,7 +79,7 @@
               <a href="/company?id={{ company[0] }}">{{ company[0] }}</a>
             </td>
             <td>{{ company[1] }}</td>
-            <td>{{ company[2] }}</td>
+            <td>{{ company[5] }}</td>
           </tr>
           {% endfor %}
         </table>
@@ -93,3 +93,8 @@
     </div>
   </body>
 </html>
+
+<script>
+  var result = {{ E | tojson }};
+  console.log(result);
+</script>

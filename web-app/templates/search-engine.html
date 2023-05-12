@@ -86,6 +86,14 @@
             </script>            
           </p>
 
+          <p>
+            <label for="type">Oorsprong van woord:</label>
+            <select name="type" id="type">
+              <option value="jaarverslag">Jaarverslag</option>
+              <option value="webdata">Website</option>
+            </select>
+          </p>
+
           <p><textarea name="searchwords" id="searchwords-selected" cols="30" rows="10"></textarea></p>
           <p><label for="amount">Aantal bedrijven: </label><input required type="number" name="amount" id="amount" min="1" step="1" max="100"></p>
 
@@ -93,23 +101,27 @@
         </form>
       </fieldset>
 
+      {{ results }}
+
       <div>
-        <table>
-          <tr>
-            <th>Ondernemingsnummer</th>
-            <th>Naam</th>
-            <th>Sector</th>
-            <th>Domeinscore</th>
-          </tr>
-          {% for company in results %}
-          <tr>
-            <td><a href="/company?id={{ company[0] }}">{{ company[0] }}</a></td>
-            <td>{{ company[1] }}</td>
-            <td>{{ company[2] }}</td>
-            <td>{{ company[3] }}</td>
-          </tr>
-          {%endfor%}
-        </table>
+          {% for key, value in results[0].items() %}
+              <h2>Gevonden ondernemingen voor: {{ key }}</h2>
+              <table>
+                <tr>
+                  <th>Ondernemingsnummer</th>
+                  <th>Naam</th>
+                  <th>Sector</th>
+                  <th>Domeinscore</th>
+                </tr>
+                {% for company in value %}
+                <tr>
+                  <td><a href="/company?id={{ company[0] }}">{{ company[0] }}</a></td>
+                  <td>{{ company[1] }}</td>
+                  <td>{{ company[2] }}</td>
+                  <td>{{ company[3] }}</td>
+                {% endfor %}
+              </table>
+          {% endfor %}
       </div>
     </div>
   </body>
