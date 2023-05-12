@@ -23,14 +23,21 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<!--
-  sector:
-  -- > waarop rapporteren zij vaak? 
-  -- > subdomeinen 
--->
-
 <script>
   var result = {{ results | tojson }};
+  
+  function getSectorName(sectoren, sectorNumber) {
+    console.log(sectoren)
+    for (let i = 0; i < sectoren.length; i++){
+        if(sectoren[i][0] == sectorNumber){
+            return sectoren[i][1];
+        } else {
+            return 'not found';
+    }
+  }
+}
+
+  var sectoren = {{ sectoren | tojson }};
   for(element in result){
       for (word in result[element]){
           if (result[element[word]]){
@@ -45,8 +52,25 @@
 
                     table = document.createElement('table');
                     var tableHead = document.createElement('thead');
+                    
+                    var newRow = document.createElement('tr');
+                    var cell1 = document.createElement('th');
+                    var cell2 = document.createElement('th');
+                    var cell3 = document.createElement('th');
+                    var text1 = document.createTextNode('Sector');
+                    var text2 = document.createTextNode('Aantal bedrijven <= 1 voorkomen');
+                    var text3 = document.createTextNode('% t.o.v. totaal');
+
+                    cell1.appendChild(text1);
+                    cell2.appendChild(text2);
+                    cell3.appendChild(text3);
+                    newRow.appendChild(cell1);
+                    newRow.appendChild(cell2);
+                    newRow.appendChild(cell3);
+                    table.appendChild(newRow);
 
                     var sectorid = array[i][2];
+                    sectorid = getSectorName(sectoren, sectorid);
                     var aantal = array[i][3];
                     var perc = array[i][4];
 
@@ -69,6 +93,8 @@
 
                     if(array[i]){
                         var sectorid = array[i][2];
+                        sectorid = getSectorName(sectoren, sectorid);
+
                         var aantal = array[i][3];
                         var perc = array[i][4];
 
@@ -89,12 +115,7 @@
 
                         table.appendChild(newRow);
 
-                        if (i == max){
-                            console.log(max ,'einnde')
-                            document.querySelector('.body-content').appendChild(table);
-                        } else {
-                            console.log(array[i], max)
-                        }
+                        if (i == max){document.querySelector('.body-content').appendChild(table);}
                     }
                 }
             }

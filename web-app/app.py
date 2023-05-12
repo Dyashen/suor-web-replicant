@@ -131,17 +131,20 @@ def give_reports():
     cur.execute(f'select categorie_id, zoekterm_description from zoektermen {filter}')
     zoektermen = cur.fetchall()
 
+    cur.execute(f'select * from "Sector"')
+    sectoren = cur.fetchall()
+
     total = []
 
     for z in zoektermen:
         to_search = str(z[1]).replace(' ', ' | ')
-        query = f"""SELECT '{z[0]}', '{z[1]}', sectorid, COUNT(*) AS aantalBedrijven, ROUND((COUNT(*)*100.0)/(SELECT COUNT(*) FROM "KMO" k LEFT JOIN "Balans" b ON k.ondernemingsnummer = b.ondernemingsnummer WHERE b.ts_document @@ to_tsquery('dutch', '{to_search}')), 2) AS percentageOpTotaalBasis FROM "KMO" k LEFT JOIN "Balans" b ON k.ondernemingsnummer = b.ondernemingsnummer WHERE b.ts_document @@ to_tsquery('dutch', '{to_search}') GROUP BY sectorid;"""
+        query = f"""SELECT '{z[0]}', '{z[1]}', sectorid, COUNT(*) AS aantalBedrijven, ROUND((COUNT(*)*100.0)/(SELECT COUNT(*) FROM "KMO" k LEFT JOIN "Balans" b ON k.ondernemingsnummer = b.ondernemingsnummer WHERE b.ts_document @@ to_tsquery('dutch', '{to_search}')), 2) AS percentageOpTotaalBasis FROM "KMO" k LEFT JOIN "Balans" b ON k.ondernemingsnummer = b.ondernemingsnummer WHERE b.ts_document @@ to_tsquery('dutch', '{to_search}') GROUP BY sectorid ORDER BY ROUND((COUNT(*)*100.0)/(SELECT COUNT(*) FROM "KMO" k LEFT JOIN "Balans" b ON k.ondernemingsnummer = b.ondernemingsnummer WHERE b.ts_document @@ to_tsquery('dutch', '{to_search}')), 2) DESC;"""
         cur.execute(query)
         woordenPerSector = cur.fetchall()
         if woordenPerSector != []:
             total.append(woordenPerSector)
 
-    return render_template('rapportering.html', results=total, categories=categorieën, catid = cat_id)
+    return render_template('rapportering.html', results=total, categories=categorieën, catid = cat_id, sectoren = sectoren)
 
 
 @app.route('/search', methods=['GET', 'POST'])
