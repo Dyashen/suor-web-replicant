@@ -33,13 +33,17 @@ h1, h2, h3{
     flex: 1;
     padding-left: 15%;
   }  
-  
 
-a{
-    text-decoration: none !important;
-    color:black;
+  .body-content table{
+    margin:auto;
+    width: 70%;
+    text-align: center;
+  }
 
-}
+
+
+
+a{text-decoration: none !important;color:black;}
 
 a:hover{
     text-decoration: solid black;
@@ -118,3 +122,4 @@ a:hover{
 .results-search:last-child{
   padding-bottom: 20%;
 }
+

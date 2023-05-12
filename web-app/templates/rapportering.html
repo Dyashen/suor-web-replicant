@@ -12,11 +12,18 @@
     <title>Dashboard</title>
   </head>
   <body>
-    {% for cat in categories %} {% if cat[1]|string == catid|string %}
-    <h1>{{ cat[0] }}</h1>
-    {% endif %} {%endfor%}
-    <div class="body-content">
+    <div class="navbar">
+      {% for company in categories %}
+      <div class="navbar-item">
+        <a href="/rapportering?catid={{ company[1] }}">{{ company[0] }}</a>
+      </div>
+      {% endfor %}
+    </div>
 
+    <div class="body-content">
+        {% for cat in categories %} {% if cat[1]|string == catid|string %}
+        <h1>{{ cat[0] }}</h1>
+        {% endif %} {%endfor%}
     </div>
   </body>
 </html>
@@ -24,102 +31,121 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
-  var result = {{ results | tojson }};
-  
-  function getSectorName(sectoren, sectorNumber) {
-    console.log(sectoren)
-    for (let i = 0; i < sectoren.length; i++){
-        if(sectoren[i][0] == sectorNumber){
-            return sectoren[i][1];
-        } else {
-            return 'not found';
-    }
+    var result = {{ results | tojson }};
+
+    function getSectorName(sectoren, sectorNumber) {
+        if(sectorNumber == 1){
+            return sectoren[0][1];
+        }
+        if(sectorNumber == 2){
+            return sectoren[1][1];
+        }
+        if(sectorNumber == 3){
+            return sectoren[2][1];
+        }
+        if(sectorNumber == 4){
+            return sectoren[3][1];
+        }
+        if(sectorNumber == 5){
+            return sectoren[4][1];
+        }
+        if(sectorNumber == 6){
+            return sectoren[5][1];
+        }
+        if(sectorNumber == 7){
+            return sectoren[6][1];
+        }
+        if(sectorNumber == 8){
+            return sectoren[7][1];
+        }
+        if(sectorNumber == 9){
+            return sectoren[8][1];
+        }
   }
-}
 
-  var sectoren = {{ sectoren | tojson }};
-  for(element in result){
-      for (word in result[element]){
-          if (result[element[word]]){
-            array = result[element[word]];
-            for (var i = 0; i <= array.length; i++) {
-                var max = array.length - 1
-                if (i == 0) {
-                    var newHeading = document.createElement('h3');
-                    var headingText = document.createTextNode(array[i][1]);
-                    newHeading.appendChild(headingText);
-                    document.querySelector('.body-content').appendChild(newHeading);
+    var sectoren = {{ sectoren | tojson }};
+    for(element in result){
+        for (word in result[element]){
+            if (result[element[word]]){
+              array = result[element[word]];
+              for (var i = 0; i <= array.length; i++) {
+                  var max = array.length - 1
+                  if (i == 0) {
+                      var newHeading = document.createElement('h3');
+                      var headingText = document.createTextNode(array[i][1]);
+                      newHeading.appendChild(headingText);
+                      document.querySelector('.body-content').appendChild(newHeading);
 
-                    table = document.createElement('table');
-                    var tableHead = document.createElement('thead');
-                    
-                    var newRow = document.createElement('tr');
-                    var cell1 = document.createElement('th');
-                    var cell2 = document.createElement('th');
-                    var cell3 = document.createElement('th');
-                    var text1 = document.createTextNode('Sector');
-                    var text2 = document.createTextNode('Aantal bedrijven <= 1 voorkomen');
-                    var text3 = document.createTextNode('% t.o.v. totaal');
+                      table = document.createElement('table');
+                      var tableHead = document.createElement('thead');
 
-                    cell1.appendChild(text1);
-                    cell2.appendChild(text2);
-                    cell3.appendChild(text3);
-                    newRow.appendChild(cell1);
-                    newRow.appendChild(cell2);
-                    newRow.appendChild(cell3);
-                    table.appendChild(newRow);
+                      var newRow = document.createElement('tr');
+                      var cell1 = document.createElement('th');
+                      var cell2 = document.createElement('th');
+                      var cell3 = document.createElement('th');
+                      var text1 = document.createTextNode('Sector');
+                      var text2 = document.createTextNode('Aantal bedrijven <= 1 voorkomen');
+                      var text3 = document.createTextNode('% t.o.v. totaal');
 
-                    var sectorid = array[i][2];
-                    sectorid = getSectorName(sectoren, sectorid);
-                    var aantal = array[i][3];
-                    var perc = array[i][4];
+                      cell1.appendChild(text1);
+                      cell2.appendChild(text2);
+                      cell3.appendChild(text3);
+                      newRow.appendChild(cell1);
+                      newRow.appendChild(cell2);
+                      newRow.appendChild(cell3);
+                      table.appendChild(newRow);
 
-                    var newRow = document.createElement('tr');
-                    var cell1 = document.createElement('td');
-                    var cell2 = document.createElement('td');
-                    var cell3 = document.createElement('td');
-                    var text1 = document.createTextNode(sectorid);
-                    var text2 = document.createTextNode(aantal);
-                    var text3 = document.createTextNode(perc);
+                      var sectorid = array[i][2];
+                      sectorid = getSectorName(sectoren, sectorid);
+                      var aantal = array[i][3];
+                      var perc = array[i][4];
 
-                    cell1.appendChild(text1);
-                    cell2.appendChild(text2);
-                    cell3.appendChild(text3);
-                    newRow.appendChild(cell1);
-                    newRow.appendChild(cell2);
-                    newRow.appendChild(cell3);
-                    table.appendChild(newRow);
-                } else {
+                      var newRow = document.createElement('tr');
+                      var cell1 = document.createElement('td');
+                      var cell2 = document.createElement('td');
+                      var cell3 = document.createElement('td');
+                      var text1 = document.createTextNode(sectorid);
+                      var text2 = document.createTextNode(aantal);
+                      var text3 = document.createTextNode(perc);
 
-                    if(array[i]){
-                        var sectorid = array[i][2];
-                        sectorid = getSectorName(sectoren, sectorid);
+                      cell1.appendChild(text1);
+                      cell2.appendChild(text2);
+                      cell3.appendChild(text3);
+                      newRow.appendChild(cell1);
+                      newRow.appendChild(cell2);
+                      newRow.appendChild(cell3);
+                      table.appendChild(newRow);
+                  } else {
 
-                        var aantal = array[i][3];
-                        var perc = array[i][4];
+                      if(array[i]){
+                          var sectorid = array[i][2];
+                          sectorid = getSectorName(sectoren, sectorid);
 
-                        var newRow = document.createElement('tr');
-                        var cell1 = document.createElement('td');
-                        var cell2 = document.createElement('td');
-                        var cell3 = document.createElement('td');
-                        var text1 = document.createTextNode(sectorid);
-                        var text2 = document.createTextNode(aantal);
-                        var text3 = document.createTextNode(perc);
+                          var aantal = array[i][3];
+                          var perc = array[i][4];
 
-                        cell1.appendChild(text1);
-                        cell2.appendChild(text2);
-                        cell3.appendChild(text3);
-                        newRow.appendChild(cell1);
-                        newRow.appendChild(cell2);
-                        newRow.appendChild(cell3);
+                          var newRow = document.createElement('tr');
+                          var cell1 = document.createElement('td');
+                          var cell2 = document.createElement('td');
+                          var cell3 = document.createElement('td');
+                          var text1 = document.createTextNode(sectorid);
+                          var text2 = document.createTextNode(aantal);
+                          var text3 = document.createTextNode(perc);
 
-                        table.appendChild(newRow);
+                          cell1.appendChild(text1);
+                          cell2.appendChild(text2);
+                          cell3.appendChild(text3);
+                          newRow.appendChild(cell1);
+                          newRow.appendChild(cell2);
+                          newRow.appendChild(cell3);
 
-                        if (i == max){document.querySelector('.body-content').appendChild(table);}
-                    }
-                }
+                          table.appendChild(newRow);
+
+                          if (i == max){document.querySelector('.body-content').appendChild(table);}
+                      }
+                  }
+              }
             }
-          }
-      }
-  }
+        }
+    }
 </script>
