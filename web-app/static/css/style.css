@@ -114,3 +114,7 @@ a:hover{
   background-color: brown;
   color: white;
 }
+
+.results-search:last-child{
+  padding-bottom: 20%;
+}

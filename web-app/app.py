@@ -111,12 +111,49 @@ def give_sector():
     except Exception as e:
         return render_template('error.html', error = f'{id} kon niet worden gevonden. {e}', query = query)
 
+
+@app.route('/rapportering', methods=['GET','POST'])
+def give_reports():
+
+    cat_id = request.args.get('catid')
+    if cat_id is not None:
+        filter = f"""where categorie_id = {cat_id}"""
+    else:
+        filter = ""
+
+    con = connection()
+    cur = con.cursor()
+
+
+    cur.execute('select * from categorie_zoektermen')
+    categorieën = cur.fetchall()
+
+    cur.execute(f'select categorie_id, zoekterm_description from zoektermen {filter}')
+    zoektermen = cur.fetchall()
+
+    total = []
+
+    for z in zoektermen:
+        to_search = str(z[1]).replace(' ', ' | ')
+        query = f"""SELECT '{z[0]}', '{z[1]}', sectorid, COUNT(*) AS aantalBedrijven, ROUND((COUNT(*)*100.0)/(SELECT COUNT(*) FROM "KMO" k LEFT JOIN "Balans" b ON k.ondernemingsnummer = b.ondernemingsnummer WHERE b.ts_document @@ to_tsquery('dutch', '{to_search}')), 2) AS percentageOpTotaalBasis FROM "KMO" k LEFT JOIN "Balans" b ON k.ondernemingsnummer = b.ondernemingsnummer WHERE b.ts_document @@ to_tsquery('dutch', '{to_search}') GROUP BY sectorid;"""
+        cur.execute(query)
+        woordenPerSector = cur.fetchall()
+        if woordenPerSector != []:
+            total.append(woordenPerSector)
+
+    return render_template('rapportering.html', results=total, categories=categorieën, catid = cat_id)
+
+
 @app.route('/search', methods=['GET', 'POST'])
 def return_search_engine():
-
     results = dict(request.args)
+
     if results:
-        sector_filter = f"""v.sectornaam = '{results['sector']}'"""
+        if (results['sector'] != 'any'):
+            sector_filter = f"""v.sectornaam = '{results['sector']}' and"""
+        else:
+            sector_filter = ""
+
         searchwords = results['searchwords'].split('\n')
         searchwords = searchwords[:-1]
 
@@ -125,11 +162,12 @@ def return_search_engine():
             if results['type'] == 'jaarverslag':
                 query = f"""
                 select k.ondernemingsnummer, k.naam, v.sectornaam, v.{results['domain']} 
-                from "Balans" b
-                left join view_website_data v on v.ondernemingsnummer = k.ondernemingsnummer
+                from "KMO" k
+                left join "Balans" b on b.ondernemingsnummer = k.ondernemingsnummer
+                left join view_website_data v on v.ondernemingsnummer = b.ondernemingsnummer
                 where 
-                    ts_document @@ to_tsquery('english', '{word.replace(' ','')}') and
-                    {sector_filter} and
+                    b.ts_document @@ to_tsquery('english', '{word.replace(' ','')}') and
+                    {sector_filter}
                     {results['domain']} >= {float(results['percentile'])/100}
                 order by v.{results['domain']} desc
                 limit {results['amount']};
@@ -155,10 +193,13 @@ def return_search_engine():
             except Exception as e:
                 print(e)
     else:
-        output = [[]]
+        output = {}
 
-    return render_template('search-engine.html', nav=return_companies(), sectoren=return_sectoren(), searchwords=return_searchwords(), results=output)
+    nav = return_companies()
+    sectoren = return_sectoren()
+    searchwords = return_searchwords()
 
+    return render_template('search-engine.html', nav=nav, sectoren=sectoren, searchwords=searchwords, results=output)
 
 if __name__ == "__main__":
     app.run()

@@ -58,6 +58,7 @@
           <p>
             <label for="">Sector</label>
             <select name="sector" id="sector">
+              <option value="any">Geen filter</option>
               {% for s in sectoren %}
               <option value="{{ s[0] }}">{{ s[0] }}</option>
               {%endfor%}
@@ -101,12 +102,10 @@
         </form>
       </fieldset>
 
-      {{ results }}
-
       <div>
-          {% for key, value in results[0].items() %}
+          {% for key, value in results.items() %}
               <h2>Gevonden ondernemingen voor: {{ key }}</h2>
-              <table>
+              <table class="results-search">
                 <tr>
                   <th>Ondernemingsnummer</th>
                   <th>Naam</th>
