@@ -91,10 +91,24 @@ def give_company():
     try:
         conn = connection()
         cur = conn.cursor()
-        query = f'select * from view_website_data where ondernemingsnummer = {id}'
-        cur.execute(f'select * from view_website_data where ondernemingsnummer = {id}')
+        query = f'select * from view_website_data vw join view_sector_overview vs on vs.sectornaam = vw.sectornaam where ondernemingsnummer = {id}'
+        cur.execute(query)
         results_company = cur.fetchall()
-        return render_template('overzicht-bedrijf.html', result=results_company, nav=return_companies())
+        sector = results_company[0][5]
+
+        query = f"select avg(subdomeinen_environment[1]), avg(subdomeinen_environment[2]), avg(subdomeinen_environment[3]), avg(subdomeinen_environment[4]), avg(subdomeinen_environment[5]) from view_website_data where sectornaam = '{sector}'"
+        cur.execute(query)
+        sector_env = cur.fetchall()
+
+        query = f"select avg(subdomeinen_social[1]), avg(subdomeinen_social[2]), avg(subdomeinen_social[3]), avg(subdomeinen_social[4]) from view_website_data where sectornaam = '{sector}'"
+        cur.execute(query)
+        sector_soc = cur.fetchall()
+
+        query = f"select avg(subdomeinen_governance[1]) from view_website_data vw join view_sector_overview vs on vs.sectornaam = vw.sectornaam where vs.sectornaam = '{sector}'"
+        cur.execute(query)
+        sector_gov = cur.fetchall()
+
+        return render_template('overzicht-bedrijf.html', result=results_company, nav=return_companies(), env=sector_env, soc=sector_soc, gov=sector_gov)
     except Exception as e:
         return render_template('error.html', error = f'{id} kon niet worden gevonden. {e}', query = query)
     

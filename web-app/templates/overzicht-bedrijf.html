@@ -86,11 +86,21 @@
 
 <script>
   var result = {{ result | tojson }};
-  console.log(result);
+  var env = {{ env | tojson }};
+  var soc = {{ soc | tojson }};
+  var gov = {{ gov | tojson }};
+
+  perc_env = env[0];
+  perc_soc = soc[0];
+  perc_gov = gov[0];
+
   var subdomains_environment = result[0][13]
   var subdomains_social = result[0][14]
   var subdomains_governance = result[0][15]
   var environment_score = result[0][16];
+  var sector_env_avg = result[0][35][1];
+  var sector_soc_avg = result[0][36][1];
+  var sector_gov_avg = result[0][37][1];
   var social_score = result[0][17];
   var governance_score = result[0][18];
 
@@ -127,12 +137,24 @@
       var ctx = document.getElementById("domains").getContext("2d");
       const myChart = new Chart(ctx, {
         type: "bar",
+        options:{
+          scales:{
+              y:{
+                max:1, min:0, ticks:{stepSize:0.1}
+              }
+          }},
+          
         data: {
           labels: ["Environment", "Social", "Governance"],
           datasets: [
             {
               label: "Percentiel",
               data: [environment_score, social_score, governance_score],
+              borderWidth: 1,
+            },
+            {
+              label: "Percentiel",
+              data: [sector_env_avg, sector_soc_avg, sector_gov_avg],
               borderWidth: 1,
             },
           ],
@@ -142,6 +164,13 @@
     var ctx = document.getElementById("scores_e").getContext("2d");
     const chart_env = new Chart(ctx, {
       type: "bar",
+      options:{
+          scales:{
+              y:{
+                max:1, min:0, ticks:{stepSize:0.1}
+              }
+            }
+          },
       data: {
         labels: ["resource use", "pollution", "climate change", "water & marine resources", "biodiversity"],
         datasets: [
@@ -150,6 +179,11 @@
             data: subdomains_environment,
             borderWidth: 1,
           },
+          {
+            label: "Percentiel",
+            data: perc_env,
+            borderWidth: 1,
+          }
         ],
       },
     });
@@ -157,6 +191,13 @@
     var ctx = document.getElementById("scores_s").getContext("2d");
     const chart_soc = new Chart(ctx, {
       type: "bar",
+      options:{
+          scales:{
+              y:{
+                max:1, min:0, ticks:{stepSize:0.1}
+              }
+            }
+          },
       data: {
         labels: ["own workforce", "workers in the value chain", "affected communities", "consumers/end-users"],
         datasets: [
@@ -165,6 +206,11 @@
             data: subdomains_social,
             borderWidth: 1,
           },
+          {
+            label: "Percentiel",
+            data: perc_soc,
+            borderWidth: 1,
+          }
         ],
       },
     });
@@ -172,12 +218,24 @@
     var ctx = document.getElementById("scores_g").getContext("2d");
     const chart_gov = new Chart(ctx, {
       type: "bar",
+      options:{
+          scales:{
+              y:{
+                max:1, min:0, ticks:{stepSize:0.1}
+              }
+            }
+          },
       data: {
-        labels: ["business conduct", "risk management & internal control"],
+        labels: ["business conduct"],
         datasets: [
           {
             label: "Percentiel",
             data: subdomains_governance,
+            borderWidth: 1,
+          },
+          {
+            label: "Percentiel",
+            data: perc_gov,
             borderWidth: 1,
           },
         ],
