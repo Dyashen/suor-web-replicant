@@ -23,15 +23,19 @@
     <div class="body-content">
       <h1>Dashboard</h1>
 
+      <h2>Advanced search</h2>
       <div class="advanced-search-button-div"><a href="/search"><input type="button" class="advanced-search-button" value="Geavanceerde zoekmachine"></input></a></div>
 
-      <h2>Sectoren</h2>
+      <h2>Reporting</h2>
+      <div class="advanced-search-button-div"><a href="/rapportering?cat=1"><input type="button" class="advanced-search-button" value="Rapportering zoektermen"></input></a></div>
+
+      <h2>Sectors</h2>
       <div class="sectoren">
         {% for sector in sectoren %}
         <a href="/sector?id={{ sector[0] }}">{{ sector[0] }}</a> {% endfor %}
       </div>
 
-      <h2>Beste Environment-scorende bedrijven</h2>
+      <h2>Best E-scoring SME's</h2>
       <div class="ranking-table">
         <table class="ranking">
           <tr>
@@ -51,7 +55,7 @@
         </table>
       </div>
 
-      <h2>Best Social-scorende bedrijven</h2>
+      <h2>Best S-scoring SME's</h2>
       <div class="ranking-table">
         <table class="ranking">
           <tr>
@@ -71,7 +75,7 @@
         </table>
       </div>
 
-      <h2>Best Governance-scorende bedrijven</h2>
+      <h2>Best G-scoring SME's</h2>
       <div class="ranking-table">
         <table class="ranking">
           <tr>
@@ -91,9 +95,6 @@
         </table>
       </div>
       
-      
-      <h2>Rapportering woorden</h2>
-      <div class="advanced-search-button-div"><a href="/rapportering?cat=1"><input type="button" class="advanced-search-button" value="Rapportering zoektermen"></input></a></div>
     </div>
   </body>
 </html>

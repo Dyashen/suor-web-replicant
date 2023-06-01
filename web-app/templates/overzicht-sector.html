@@ -20,7 +20,7 @@
 
   <div class="body-content">
     <div>
-      <a href="/">Terug naar home.</a>
+      <a href="/">Back to the homepage.</a>
     </div>
 
     <h1>{{ result[0][0] }}</h1>
@@ -34,9 +34,9 @@
 
 
     <div class="charts">
-        <div class="chart"><h3>balanstotaal</h3><canvas id="balanstotaal" width="500" height="500"></canvas></div>
-        <div class="chart"><h3>Omzet</h3><canvas id="omzet" width="500" height="500"></canvas></div>
-        <div class="chart"><h3>Aantal werknemers</h3><canvas id="aantal_werknemers" width="500" height="500"></canvas></div>
+        <div class="chart"><h3>Balance total</h3><canvas id="balanstotaal" width="500" height="500"></canvas></div>
+        <div class="chart"><h3>Revenue</h3><canvas id="omzet" width="500" height="500"></canvas></div>
+        <div class="chart"><h3>Amount of employees</h3><canvas id="aantal_werknemers" width="500" height="500"></canvas></div>
     </div>
     </div>
     </body>
@@ -44,12 +44,6 @@
 </html>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-<!--
-  sector:
-  -- > waarop rapporteren zij vaak? 
-  -- > subdomeinen 
--->
 
     <script>
         var result = {{ result | tojson }};

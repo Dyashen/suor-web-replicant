@@ -196,7 +196,7 @@ def return_search_engine():
                 left join view_website_data v on v.ondernemingsnummer = k.ondernemingsnummer
                 where 
                     ts_document @@ to_tsquery('english', '{word.replace(' ','')}') and
-                    {sector_filter} and
+                    {sector_filter}
                     {results['domain']} >= {float(results['percentile'])/100}
                 order by v.{results['domain']} desc
                 limit {results['amount']};

@@ -25,24 +25,24 @@
       <a href="/">Terug naar home.</a>
     </div>
 
-    <h1>Basis informatie</h1>
+    <h1>SME Information</h1>
     <div class="information">
         <div class="basic-info">
             <table>
-                <tr><td>Naam: </td><td>{{ result[0][1] }}</td></tr>
+                <tr><td>Name: </td><td>{{ result[0][1] }}</td></tr>
                 <tr><td>Site: </td><td><a href="{{ result[0][2] }}">{{ result[0][2] }}</a></td></tr>
-                <tr><td>Soort vereniging: </td><td>{{ result[0][3] }}</td></tr>
+                <tr><td>Association: </td><td>{{ result[0][3] }}</td></tr>
                 <tr><td>B2B/B2C: </td><td>{{ result[0][4] }}</td></tr>
                 <tr><td>Sector: </td><td>{{ result[0][5] }}</td></tr>
-                <tr><td>Sector: </td><td>{{ result[0][22] }} {{ result[0][23] }}, {{ result[0][24] }}</td></tr>
+                <tr><td>Location: </td><td>{{ result[0][22] }} {{ result[0][23] }}, {{ result[0][24] }}</td></tr>
             </table>
         </div>
 
         <div class="searchwords">
             <table class="table-searchwords">
                 <tr>
-                    <th>Woord</th>
-                    <th>Voorkomens</th>
+                    <th>Word</th>
+                    <th>Occurrences</th>
                 </tr>
                 <tbody id="table-body">
                 </tbody>
@@ -72,7 +72,7 @@
 
     <div class="charts">
         <div class="chart">
-            <h3>Domeinscores</h3>
+            <h3>Domainscores</h3>
             <canvas id="domains"></canvas>
         </div>
     </div>
